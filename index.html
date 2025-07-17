@@ -1,0 +1,158 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script>```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog: Enfoque por Competencias y Calidad Educativa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .animate-pulse {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Header -->
+  <header class="bg-blue-600 text-white py-6">
+    <div class="container mx-auto px-4">
+      <h1 class="text-3xl font-bold">El Enfoque por Competencias y su Relación con la Calidad Educativa</h1>
+      <p class="mt-2">Explora cómo el enfoque por competencias transforma la educación</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-8">
+    <!-- Introduction -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">¿Qué es el Enfoque por Competencias?</h2>
+      <p class="text-gray-700">
+        El enfoque por competencias en la educación se centra en el desarrollo de habilidades, conocimientos y actitudes que permitan a los estudiantes enfrentar situaciones reales de manera efectiva. A diferencia de los métodos tradicionales, que priorizan la memorización, este enfoque promueve el aprendizaje significativo y la aplicación práctica.
+      </p>
+      <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Estudiantes aprendiendo" class="mt-4 rounded-lg shadow-lg animate-pulse" style="max-width: 100%;">
+    </section>
+
+    <!-- Video Section -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">Video Explicativo</h2>
+      <p class="text-gray-700 mb-4">Mira este video para entender cómo el enfoque por competencias mejora la calidad educativa:</p>
+      <div class="relative" style="padding-bottom: 56.25%;">
+        <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/tCOI3UBlgVE" title="Video sobre enfoque por competencias" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <!-- Reading Section -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">Lectura Recomendada</h2>
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-xl font-bold">La Calidad Educativa y las Competencias</h3>
+        <p class="text-gray-600 mt-2">
+          La calidad educativa no solo se mide por los conocimientos adquiridos, sino por la capacidad de los estudiantes para aplicarlos en contextos reales. Según Tobón (2013), el enfoque por competencias integra el saber, el saber hacer y el saber ser, garantizando un aprendizaje integral. Este modelo fomenta la autonomía, el pensamiento crítico y la resolución de problemas, elementos clave para una educación de calidad.
+        </p>
+        <p class="text-gray-600 mt-2">
+          En la práctica, las instituciones educativas que adoptan este enfoque diseñan currículos basados en resultados de aprendizaje, donde los estudiantes demuestran sus competencias a través de proyectos, análisis de casos y actividades colaborativas.
+        </p>
+      </div>
+    </section>
+
+    <!-- Comments Section -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">Comentarios</h2>
+      <div class="space-y-4">
+        <div class="bg-white p-4 rounded-lg shadow-lg">
+          <p class="font-semibold">Ana Gómez</p>
+          <p class="text-gray-600">¡Excelente artículo! El enfoque por competencias realmente ayuda a los estudiantes a prepararse para el mundo real. Me encanta cómo se explica la importancia de la aplicación práctica.</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-lg">
+          <p class="font-semibold">Carlos Ramírez</p>
+          <p class="text-gray-600">El video es muy claro y muestra cómo las competencias pueden transformar la educación. Creo que todos los profesores deberían adoptar este enfoque.</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-lg">
+          <p class="font-semibold">María López</p>
+          <p class="text-gray-600">La lectura recomendada me pareció muy útil. Sin embargo, creo que se podría incluir más ejemplos prácticos de cómo implementar este enfoque en el aula.</p>
+        </div>
+      </div>
+      <!-- Comment Form -->
+      <div class="mt-6">
+        <h3 class="text-xl font-semibold mb-2">Deja tu Comentario</h3>
+        <div class="bg-white p-4 rounded-lg shadow-lg">
+          <input type="text" id="name" placeholder="Tu nombre" class="w-full p-2 mb-2 border rounded">
+          <textarea id="comment" placeholder="Escribe tu comentario..." class="w-full p-2 mb-2 border rounded" rows="4"></textarea>
+          <button onclick="addComment()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Enviar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-6">
+    <div class="container mx-auto px-4">
+      <p>© 2025 Blog Educativo. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+    function addComment() {
+      const name = document.getElementById('name').value;
+      const comment = document.getElementById('comment').value;
+      if (name && comment) {
+        const commentSection = document.querySelector('.space-y-4');
+        const newComment = document.createElement('div');
+        newComment.className = 'bg-white p-4 rounded-lg shadow-lg';
+        newComment.innerHTML = `<p class="font-semibold">${name}</p><p class="text-gray-600">${comment}</p>`;
+        commentSection.appendChild(newComment);
+        document.getElementById('name').value = '';
+        document.getElementById('comment').value = '';
+        alert('¡Comentario agregado!');
+      } else {
+        alert('Por favor, completa ambos campos.');
+      }
+    }
+  </script>
+</body>
+</html>
+```
